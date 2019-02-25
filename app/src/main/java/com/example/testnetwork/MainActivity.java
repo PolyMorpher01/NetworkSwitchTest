@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
   private ConnectivityManager.NetworkCallback mWifiNetworkCallback, mMobileNetworkCallback;
   private Network mWifiNetwork, mMobileNetwork;
 
-  NetworkType networkType;
-
   private static final String URL_DEV = "https://dev.uvertz.lftechnology.com/api/v1";
   private static final String URL_UVERTZ = "http://192.168.4.1:3000/api/v1/status";
 
@@ -43,9 +41,6 @@ public class MainActivity extends AppCompatActivity {
     b2 = findViewById(R.id.button2);
 
     textView = findViewById(R.id.textView);
-
-    networkType = new NetworkType(this);
-
     enableStrictMode();
 
     final ConnectivityManager manager =
@@ -92,14 +87,12 @@ public class MainActivity extends AppCompatActivity {
     b1.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         makeHTTPRequest(URL_UVERTZ, mWifiNetwork);
-        //makeHTTPRequest(URL_GOOGLE, networkType.get(NetworkConstants.NETWORK_WIFI));
       }
     });
 
     b2.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         makeHTTPRequest(URL_DEV, mMobileNetwork);
-        //makeHTTPRequest(URL_GOOGLE, networkType.get(NetworkConstants.NETWORK_CELLULAR));
       }
     });
   }
