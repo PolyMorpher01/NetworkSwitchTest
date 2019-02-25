@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
@@ -23,8 +24,9 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-  Button b1, b2;
-  TextView textView;
+  Button buttonWifiNetwork, buttonCellNetwork;
+  TextView textResponse;
+  EditText editTextWifiNetwork, editTextCellNetwork;
 
   private ConnectivityManager.NetworkCallback mWifiNetworkCallback, mMobileNetworkCallback;
   private Network mWifiNetwork, mMobileNetwork;
@@ -37,10 +39,13 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    b1 = findViewById(R.id.button);
-    b2 = findViewById(R.id.button2);
+    buttonWifiNetwork = findViewById(R.id.btn_wifi_network);
+    buttonCellNetwork = findViewById(R.id.btn_network_cellular);
 
-    textView = findViewById(R.id.textView);
+    editTextWifiNetwork = findViewById(R.id.edit_text_url_wifi);
+    editTextCellNetwork = findViewById(R.id.edit_text_url_cell);
+
+    textResponse = findViewById(R.id.text_response);
     enableStrictMode();
 
     final ConnectivityManager manager =
@@ -84,15 +89,17 @@ public class MainActivity extends AppCompatActivity {
     mobileNwBuilder.addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
     manager.requestNetwork(mobileNwBuilder.build(), mMobileNetworkCallback);
 
-    b1.setOnClickListener(new View.OnClickListener() {
+    buttonWifiNetwork.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        makeHTTPRequest(URL_UVERTZ, mWifiNetwork);
+        //makeHTTPRequest(URL_UVERTZ, mWifiNetwork);
+        makeHTTPRequest(editTextWifiNetwork.getText().toString(), mWifiNetwork);
       }
     });
 
-    b2.setOnClickListener(new View.OnClickListener() {
+    buttonCellNetwork.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        makeHTTPRequest(URL_DEV, mMobileNetwork);
+        //makeHTTPRequest(URL_DEV, mMobileNetwork);
+        makeHTTPRequest(editTextCellNetwork.getText().toString(), mMobileNetwork);
       }
     });
   }
@@ -110,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
       Toast.makeText(this, statusMessage, Toast.LENGTH_SHORT).show();
 
       String response = getResponse(conn.getInputStream());
-      textView.setText(response);
+      textResponse.setText(response);
     } catch (SocketException e) {
       e.printStackTrace();
     } catch (Exception e) {
